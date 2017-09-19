@@ -2,6 +2,7 @@ package com.tkporter.sendsms;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.provider.Telephony;
 
@@ -65,7 +66,7 @@ public class SendSMSModule extends ReactContextBaseJavaModule implements Activit
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 String defaultSmsPackageName = Telephony.Sms.getDefaultSmsPackage(reactContext);
-                sendIntent = new Intent(Intent.ACTION_SEND);
+                sendIntent = new Intent(Intent.ACTION_SENDTO);
                 if (defaultSmsPackageName != null){
                     sendIntent.setPackage(defaultSmsPackageName);
                 }
@@ -90,7 +91,8 @@ public class SendSMSModule extends ReactContextBaseJavaModule implements Activit
                     recipientString += recipients.getString(i);
                     recipientString += separator;
                 }
-                sendIntent.putExtra("address", recipientString);
+                Uri sendSmsTo = Uri.parse("smsto:" + recipientString);
+                sendIntent.setData(sendSmsTo);
             }
 
             reactContext.startActivityForResult(sendIntent, REQUEST_CODE, sendIntent.getExtras());
