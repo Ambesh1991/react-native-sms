@@ -77,7 +77,6 @@ public class SendSMSModule extends ReactContextBaseJavaModule implements Activit
             }
 
             sendIntent.putExtra("sms_body", body);
-            sendIntent.putExtra("exit_on_sent", true);
 
             //if recipients specified
             if (recipients != null) {
@@ -91,6 +90,7 @@ public class SendSMSModule extends ReactContextBaseJavaModule implements Activit
                     recipientString += recipients.getString(i);
                     recipientString += separator;
                 }
+				recipientString=recipientString.trim();
                 Uri sendSmsTo = Uri.parse("smsto:" + recipientString);
                 sendIntent.setData(sendSmsTo);
             }
